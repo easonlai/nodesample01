@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodesample01
+  labels:
+    app: nodesample01
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    run: nodesample01
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nodesample01
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: nodesample01
+        app: nodesample01
+    spec:
+      containers:
+      - name: nodesample01
+        image: qoolabacr.azurecr.io/easonlai/nodesample01
+        ports:
+          - containerPort: 3000
+      imagePullSecrets:
+        - name: qoolabacr
